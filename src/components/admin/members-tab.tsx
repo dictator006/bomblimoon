@@ -22,14 +22,13 @@ export function MembersTab() {
   });
 
   const visible = members.filter(
-    (m) => m.full_name.includes(q.trim()) || m.mobile.includes(q.trim()),
+    (m) => `${m.first_name} ${m.last_name}`.includes(q.trim()) || m.mobile.includes(q.trim()),
   );
 
   function exportExcel() {
     const rows = visible.map((m) => ({
-      "نام و نام خانوادگی": m.full_name,
+      "نام و نام خانوادگی": `${m.first_name} ${m.last_name}`,
       "شماره موبایل": m.mobile,
-      "تاریخ تولد": m.birth_date ?? "",
       "تاریخ عضویت": new Date(m.created_at).toLocaleDateString("fa-IR"),
     }));
     const sheet = XLSX.utils.json_to_sheet(rows);
@@ -65,18 +64,16 @@ export function MembersTab() {
             <tr>
               <th className="p-3 font-bold">نام</th>
               <th className="p-3 font-bold">موبایل</th>
-              <th className="p-3 font-bold">تاریخ تولد</th>
               <th className="p-3 font-bold">عضویت</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-border">
             {visible.map((m) => (
               <tr key={m.id}>
-                <td className="p-3 font-semibold">{m.full_name}</td>
+                <td className="p-3 font-semibold">{`${m.first_name} ${m.last_name}`}</td>
                 <td className="p-3" dir="ltr">
                   {m.mobile}
                 </td>
-                <td className="p-3 text-muted-foreground">{m.birth_date ?? "—"}</td>
                 <td className="p-3 text-muted-foreground">
                   {new Date(m.created_at).toLocaleDateString("fa-IR")}
                 </td>
@@ -84,7 +81,7 @@ export function MembersTab() {
             ))}
             {visible.length === 0 && (
               <tr>
-                <td colSpan={4} className="p-6 text-center text-muted-foreground">
+                <td colSpan={3} className="p-6 text-center text-muted-foreground">
                   عضوی یافت نشد.
                 </td>
               </tr>

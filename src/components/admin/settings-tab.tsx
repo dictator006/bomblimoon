@@ -8,16 +8,15 @@ import { AdminButton, Field, inputClass } from "./ui";
 
 const FIELDS: { key: keyof SiteSettings; label: string; ltr?: boolean }[] = [
   { key: "brand_name", label: "نام برند" },
-  { key: "tagline", label: "شعار برند" },
+  { key: "bio", label: "معرفی برند" },
   { key: "phone", label: "شماره تماس", ltr: true },
   { key: "address", label: "آدرس" },
   { key: "working_hours", label: "ساعات کاری" },
-  { key: "instagram_url", label: "اینستاگرام", ltr: true },
   { key: "snappfood_url", label: "لینک اسنپ‌فود", ltr: true },
   { key: "google_maps_url", label: "لینک گوگل مپ", ltr: true },
   { key: "neshan_url", label: "لینک نشان", ltr: true },
-  { key: "seo_title", label: "عنوان سئو" },
-  { key: "seo_description", label: "توضیحات سئو" },
+  { key: "meta_title", label: "عنوان سئو" },
+  { key: "meta_description", label: "توضیحات سئو" },
 ];
 
 export function SettingsTab() {
@@ -44,7 +43,7 @@ export function SettingsTab() {
   const save = useMutation({
     mutationFn: async () => {
       if (!data) return;
-      const { error } = await supabase.from("site_settings").update(form).eq("id", data.id);
+      const { error } = await supabase.from("site_settings").update(form as Partial<SiteSettings>).eq("id", data.id);
       if (error) throw error;
     },
     onSuccess: () => {
