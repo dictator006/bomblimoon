@@ -1,28 +1,32 @@
 import { createServerFn } from "@tanstack/react-start";
 import type { Category, Product, SiteSettings } from "./types";
 
-export const getSiteSettings = createServerFn({ method: "GET" }).handler(async () => {
-  const { createPublicClient } = await import("./public-client.server");
-  const { data } = await createPublicClient()
-    .from("site_settings")
-    .select("*")
-    .limit(1)
-    .maybeSingle();
-  return (data ?? null) as SiteSettings | null;
-});
+export const getSiteSettings = createServerFn({ method: "GET" }).handler(
+  async (): Promise<SiteSettings | null> => {
+    const { createPublicClient } = await import("./public-client.server");
+    const { data } = await createPublicClient()
+      .from("site_settings")
+      .select("*")
+      .limit(1)
+      .maybeSingle();
+    return (data ?? null) as SiteSettings | null;
+  },
+);
 
-export const getMenu = createServerFn({ method: "GET" }).handler(async () => {
-  const { createPublicClient } = await import("./public-client.server");
-  const supabase = createPublicClient();
-  const [categories, products] = await Promise.all([
-    supabase.from("categories").select("*").order("sort_order", { ascending: true }),
-    supabase.from("products").select("*").order("sort_order", { ascending: true }),
-  ]);
-  return {
-    categories: (categories.data ?? []) as Category[],
-    products: (products.data ?? []) as Product[],
-  };
-});
+export const getMenu = createServerFn({ method: "GET" }).handler(
+  async (): Promise<{ categories: Category[]; products: Product[] }> => {
+    const { createPublicClient } = await import("./public-client.server");
+    const supabase = createPublicClient();
+    const [categories, products] = await Promise.all([
+      supabase.from("categories").select("*").order("sort_order", { ascending: true }),
+      supabase.from("products").select("*").order("sort_order", { ascending: true }),
+    ]);
+    return {
+      categories: (categories.data ?? []) as Category[],
+      products: (products.data ?? []) as Product[],
+    };
+  },
+);
 
 function normalizeMobile(raw: string): string | null {
   const digits = raw
