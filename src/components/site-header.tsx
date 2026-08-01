@@ -1,4 +1,5 @@
-import { Link, useLoaderData } from "@tanstack/react-router";
+import { useSettings } from "@/lib/use-settings";
+import { Link } from "@tanstack/react-router";
 import { Menu, Moon, Sun, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import logo from "@/assets/logo.png";
@@ -13,7 +14,7 @@ const links = [
 ] as const;
 
 export function SiteHeader() {
-  const settings = useLoaderData({ from: "__root__" });
+  const settings = useSettings();
   const { theme, toggle } = useTheme();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);

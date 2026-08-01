@@ -1,4 +1,5 @@
-import { createFileRoute, useLoaderData } from "@tanstack/react-router";
+import { useSettings } from "@/lib/use-settings";
+import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { Download, QrCode } from "lucide-react";
 import { SiteHeader } from "@/components/site-header";
@@ -23,7 +24,7 @@ export const Route = createFileRoute("/qr")({
 });
 
 function QrPage() {
-  const settings = useLoaderData({ from: "__root__" });
+  const settings = useSettings();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [url, setUrl] = useState("");
   const [target, setTarget] = useState<"site" | "menu">("menu");

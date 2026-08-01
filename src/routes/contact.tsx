@@ -1,4 +1,5 @@
-import { createFileRoute, useLoaderData } from "@tanstack/react-router";
+import { useSettings } from "@/lib/use-settings";
+import { createFileRoute } from "@tanstack/react-router";
 import { Clock, Compass, MapPin, Navigation, Phone } from "lucide-react";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
@@ -22,7 +23,7 @@ export const Route = createFileRoute("/contact")({
 });
 
 function ContactPage() {
-  const settings = useLoaderData({ from: "__root__" });
+  const settings = useSettings();
 
   const items = [
     { icon: Phone, title: "شماره تماس", value: settings?.phone ?? "", ltr: true },

@@ -1,4 +1,5 @@
-import { createFileRoute, useLoaderData } from "@tanstack/react-router";
+import { useSettings } from "@/lib/use-settings";
+import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
@@ -26,8 +27,11 @@ export const Route = createFileRoute("/menu")({
 });
 
 function MenuPage() {
-  const settings = useLoaderData({ from: "__root__" });
-  const { categories, products } = Route.useLoaderData();
+  const settings = useSettings();
+  const { categories, products } = Route.useLoaderData() as {
+    categories: Category[];
+    products: Product[];
+  };
   const [active, setActive] = useState<string>("all");
 
   const visibleCategories =

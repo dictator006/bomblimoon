@@ -1,4 +1,5 @@
-import { createFileRoute, useLoaderData } from "@tanstack/react-router";
+import { useSettings } from "@/lib/use-settings";
+import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
@@ -26,7 +27,7 @@ export const Route = createFileRoute("/club")({
 });
 
 function ClubPage() {
-  const settings = useLoaderData({ from: "__root__" });
+  const settings = useSettings();
   const submit = useServerFn(joinClub);
   const [form, setForm] = useState({ firstName: "", lastName: "", mobile: "" });
   const [loading, setLoading] = useState(false);

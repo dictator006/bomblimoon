@@ -1,4 +1,5 @@
-import { createFileRoute, Link, useLoaderData } from "@tanstack/react-router";
+import { useSettings } from "@/lib/use-settings";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowLeft, Clock, Flame, Leaf, MapPin, Sparkles, Truck } from "lucide-react";
 import heroImage from "@/assets/hero-burger.jpg";
 import { SiteHeader } from "@/components/site-header";
@@ -36,8 +37,11 @@ const features = [
 ];
 
 function HomePage() {
-  const settings = useLoaderData({ from: "__root__" });
-  const { categories, products } = Route.useLoaderData();
+  const settings = useSettings();
+  const { categories, products } = Route.useLoaderData() as {
+    categories: Category[];
+    products: Product[];
+  };
   const emojiByCategory = new Map(categories.map((c) => [c.id, c.emoji]));
   const featured = products.filter((p) => p.labels.length > 0).slice(0, 6);
 

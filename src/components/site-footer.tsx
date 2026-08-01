@@ -1,9 +1,10 @@
-import { Link, useLoaderData } from "@tanstack/react-router";
+import { useSettings } from "@/lib/use-settings";
+import { Link } from "@tanstack/react-router";
 import { Clock, MapPin, Phone } from "lucide-react";
 import logo from "@/assets/logo.png";
 
 export function SiteFooter() {
-  const settings = useLoaderData({ from: "__root__" });
+  const settings = useSettings();
 
   return (
     <footer className="mt-20 border-t border-border bg-card/50">
