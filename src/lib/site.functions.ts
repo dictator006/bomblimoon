@@ -1,4 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
+import { normalizeIranMobile } from "./mobile";
 import type { Category, Product, SiteSettings } from "./types";
 
 export const getSiteSettings = createServerFn({ method: "GET" }).handler(
@@ -28,17 +29,6 @@ export const getMenu = createServerFn({ method: "GET" }).handler(
   },
 );
 
-function normalizeMobile(raw: string): string | null {
-  const digits = raw
-    .replace(/[۰-۹]/g, (d) => String("۰۱۲۳۴۵۶۷۸۹".indexOf(d)))
-    .replace(/\D/g, "");
-  let value = digits;
-  if (value.startsWith("0098")) value = value.slice(4);
-  else if (value.startsWith("98") && value.length === 12) value = value.slice(2);
-  if (value.length === 10 && value.startsWith("9")) value = "0" + value;
-  return /^09\d{9}$/.test(value) ? value : null;
-}
-
 export const joinClub = createServerFn({ method: "POST" })
   .inputValidator((data: { firstName: string; lastName: string; mobile: string }) => data)
   .handler(async ({ data }) => {
@@ -50,7 +40,7 @@ export const joinClub = createServerFn({ method: "POST" })
     if (lastName.length < 2 || lastName.length > 50) {
       return { ok: false as const, message: "نام خانوادگی را درست وارد کنید." };
     }
-    const mobile = normalizeMobile(data.mobile ?? "");
+    const mobile = normalizeIranMobile(data.mobile ?? "");
     if (!mobile) {
       return { ok: false as const, message: "شماره موبایل معتبر نیست. مثال: ۰۹۱۲۱۲۳۴۵۶۷" };
     }
