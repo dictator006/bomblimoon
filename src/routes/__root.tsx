@@ -14,6 +14,7 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { themeScript } from "../lib/theme";
 import { getSiteSettings } from "../lib/site.functions";
+import type { SiteSettings } from "../lib/types";
 
 function NotFoundComponent() {
   return (
@@ -76,7 +77,7 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
 }
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
-  loader: () => getSiteSettings(),
+  loader: (): Promise<SiteSettings | null> => getSiteSettings(),
   head: ({ loaderData }) => ({
     meta: [
       { charSet: "utf-8" },

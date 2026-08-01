@@ -5,9 +5,10 @@ import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { ProductCard } from "@/components/product-card";
 import { getMenu } from "@/lib/site.functions";
+import type { Category, Product } from "@/lib/types";
 
 export const Route = createFileRoute("/")({
-  loader: () => getMenu(),
+  loader: (): Promise<{ categories: Category[]; products: Product[] }> => getMenu(),
   head: () => ({
     meta: [
       { title: "بمب لیمون | فست فود مدرن، سریع و خوشمزه" },
