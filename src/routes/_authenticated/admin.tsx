@@ -87,11 +87,23 @@ function AdminPage() {
       </header>
 
       <main className="mx-auto max-w-6xl px-4 py-8">
-        {tab === "products" && <ProductsTab />}
-        {tab === "categories" && <CategoriesTab />}
-        {tab === "members" && <MembersTab />}
-        {tab === "settings" && <SettingsTab />}
+        {checkingRole ? (
+          <p className="p-6 text-center text-sm text-muted-foreground">در حال بررسی دسترسی…</p>
+        ) : !isAdmin ? (
+          <p className="surface-card p-6 text-center text-sm font-bold">
+            این حساب دسترسی مدیریت ندارد.
+          </p>
+        ) : (
+          <>
+            {tab === "dashboard" && <DashboardTab />}
+            {tab === "products" && <ProductsTab />}
+            {tab === "categories" && <CategoriesTab />}
+            {tab === "members" && <MembersTab />}
+            {tab === "settings" && <SettingsTab />}
+          </>
+        )}
       </main>
+
     </div>
   );
 }
