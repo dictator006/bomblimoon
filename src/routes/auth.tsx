@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Loader2, Lock } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { claimAdmin } from "@/lib/admin.functions";
+import { ensureAdminAccount } from "@/lib/admin.functions";
 import logo from "@/assets/logo.png";
 
 export const Route = createFileRoute("/auth")({
@@ -23,48 +23,25 @@ export const Route = createFileRoute("/auth")({
 
 function AuthPage() {
   const navigate = useNavigate();
-  const [mode, setMode] = useState<"signin" | "signup">("signin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    void ensureAdminAccount().catch(() => undefined);
     void supabase.auth.getSession().then(({ data }) => {
       if (data.session) void navigate({ to: "/admin", replace: true });
     });
   }, [navigate]);
 
-  async function afterLogin() {
-    try {
-      await claimAdmin();
-    } catch {
-      /* already has an admin */
-    }
-    await navigate({ to: "/admin", replace: true });
-  }
-
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
     try {
-      if (mode === "signin") {
-        const { error } = await supabase.auth.signInWithPassword({ email, password });
-        if (error) throw error;
-        await afterLogin();
-      } else {
-        const { data, error } = await supabase.auth.signUp({
-          email,
-          password,
-          options: { emailRedirectTo: window.location.origin + "/auth" },
-        });
-        if (error) throw error;
-        if (data.session) {
-          await afterLogin();
-        } else {
-          toast.success("حساب ساخته شد. ایمیل خود را برای تأیید بررسی کنید.");
-          setMode("signin");
-        }
-      }
+      await ensureAdminAccount().catch(() => undefined);
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) throw error;
+      await navigate({ to: "/admin", replace: true });
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "ورود ناموفق بود.");
     } finally {
@@ -78,9 +55,7 @@ function AuthPage() {
         <div className="flex flex-col items-center text-center">
           <img src={logo} alt="لوگو" width={56} height={56} className="h-14 w-14 object-contain" />
           <h1 className="mt-4 text-xl font-extrabold">پنل مدیریت بمب لیمون</h1>
-          <p className="mt-2 text-xs text-muted-foreground">
-            {mode === "signin" ? "برای ادامه وارد شوید" : "ساخت حساب مدیر"}
-          </p>
+          <p className="mt-2 text-xs text-muted-foreground">برای ادامه وارد شوید</p>
         </div>
 
         <form onSubmit={onSubmit} className="mt-6 space-y-4">
@@ -93,6 +68,7 @@ function AuthPage() {
               type="email"
               required
               dir="ltr"
+              autoComplete="username"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="w-full rounded-xl border border-input bg-background px-4 py-3 text-left text-sm outline-none focus:ring-2 focus:ring-ring"
@@ -108,6 +84,7 @@ function AuthPage() {
               required
               minLength={6}
               dir="ltr"
+              autoComplete="current-password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="w-full rounded-xl border border-input bg-background px-4 py-3 text-left text-sm outline-none focus:ring-2 focus:ring-ring"
@@ -119,16 +96,9 @@ function AuthPage() {
             className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-primary px-6 py-3.5 text-sm font-bold text-primary-foreground disabled:opacity-60"
           >
             {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Lock className="h-4 w-4" />}
-            {mode === "signin" ? "ورود" : "ثبت‌نام"}
+            ورود
           </button>
         </form>
-
-        <button
-          onClick={() => setMode(mode === "signin" ? "signup" : "signin")}
-          className="mt-4 w-full text-center text-xs text-muted-foreground hover:text-foreground"
-        >
-          {mode === "signin" ? "حساب مدیر ندارید؟ ثبت‌نام" : "قبلاً ثبت‌نام کرده‌اید؟ ورود"}
-        </button>
       </div>
     </div>
   );
