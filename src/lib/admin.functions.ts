@@ -1,24 +1,38 @@
 import { createServerFn } from "@tanstack/react-start";
-import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
 /**
- * Grants the admin role to the first signed-in user when no admin exists yet.
- * Used once to bootstrap the panel; afterwards it is a no-op.
+ * Idempotently makes sure the single administrator account exists and has the
+ * admin role. Credentials come from server-side env vars, never from the client.
  */
-export const claimAdmin = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
-  .handler(async ({ context }) => {
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { count } = await supabaseAdmin
-      .from("user_roles")
-      .select("id", { count: "exact", head: true })
-      .eq("role", "admin");
+export const ensureAdminAccount = createServerFn({ method: "POST" }).handler(async () => {
+  const email = process.env["ADMIN_EMAIL"];
+  const password = process.env["ADMIN_INITIAL_PASSWORD"];
+  if (!email || !password) return { ok: false as const };
 
-    if ((count ?? 0) > 0) return { granted: false as const };
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
-    const { error } = await supabaseAdmin
-      .from("user_roles")
-      .insert({ user_id: context.userId, role: "admin" });
-    if (error) return { granted: false as const };
-    return { granted: true as const };
-  });
+  const { data: list } = await supabaseAdmin.auth.admin.listUsers({ page: 1, perPage: 200 });
+  let user = list?.users.find((u) => u.email?.toLowerCase() === email.toLowerCase());
+
+  if (!user) {
+    const { data, error } = await supabaseAdmin.auth.admin.createUser({
+      email,
+      password,
+      email_confirm: true,
+    });
+    if (error || !data.user) return { ok: false as const };
+    user = data.user;
+  }
+
+  const { count } = await supabaseAdmin
+    .from("user_roles")
+    .select("id", { count: "exact", head: true })
+    .eq("user_id", user.id)
+    .eq("role", "admin");
+
+  if ((count ?? 0) === 0) {
+    await supabaseAdmin.from("user_roles").insert({ user_id: user.id, role: "admin" });
+  }
+
+  return { ok: true as const };
+});

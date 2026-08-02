@@ -1,8 +1,9 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { LayoutGrid, LogOut, Settings, Users, UtensilsCrossed } from "lucide-react";
-import { useQueryClient } from "@tanstack/react-query";
+import { Gauge, LayoutGrid, LogOut, Settings, Users, UtensilsCrossed } from "lucide-react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { DashboardTab } from "@/components/admin/dashboard-tab";
 import { ProductsTab } from "@/components/admin/products-tab";
 import { CategoriesTab } from "@/components/admin/categories-tab";
 import { MembersTab } from "@/components/admin/members-tab";
@@ -21,16 +22,25 @@ export const Route = createFileRoute("/_authenticated/admin")({
 });
 
 const TABS = [
-  { id: "products", label: "محصولات", icon: UtensilsCrossed },
+  { id: "dashboard", label: "داشبورد", icon: Gauge },
+  { id: "products", label: "غذاها", icon: UtensilsCrossed },
   { id: "categories", label: "دسته‌بندی‌ها", icon: LayoutGrid },
   { id: "members", label: "باشگاه مشتریان", icon: Users },
   { id: "settings", label: "تنظیمات", icon: Settings },
 ] as const;
 
 function AdminPage() {
-  const [tab, setTab] = useState<(typeof TABS)[number]["id"]>("products");
+  const [tab, setTab] = useState<(typeof TABS)[number]["id"]>("dashboard");
   const navigate = useNavigate();
   const qc = useQueryClient();
+
+  const { data: isAdmin, isLoading: checkingRole } = useQuery({
+    queryKey: ["admin", "is-admin"],
+    queryFn: async () => {
+      const { data } = await supabase.from("user_roles").select("id").eq("role", "admin").limit(1);
+      return (data?.length ?? 0) > 0;
+    },
+  });
 
   async function signOut() {
     await qc.cancelQueries();
@@ -38,6 +48,7 @@ function AdminPage() {
     await supabase.auth.signOut();
     await navigate({ to: "/auth", replace: true });
   }
+
 
   return (
     <div className="min-h-screen bg-background">
@@ -76,11 +87,23 @@ function AdminPage() {
       </header>
 
       <main className="mx-auto max-w-6xl px-4 py-8">
-        {tab === "products" && <ProductsTab />}
-        {tab === "categories" && <CategoriesTab />}
-        {tab === "members" && <MembersTab />}
-        {tab === "settings" && <SettingsTab />}
+        {checkingRole ? (
+          <p className="p-6 text-center text-sm text-muted-foreground">در حال بررسی دسترسی…</p>
+        ) : !isAdmin ? (
+          <p className="surface-card p-6 text-center text-sm font-bold">
+            این حساب دسترسی مدیریت ندارد.
+          </p>
+        ) : (
+          <>
+            {tab === "dashboard" && <DashboardTab />}
+            {tab === "products" && <ProductsTab />}
+            {tab === "categories" && <CategoriesTab />}
+            {tab === "members" && <MembersTab />}
+            {tab === "settings" && <SettingsTab />}
+          </>
+        )}
       </main>
+
     </div>
   );
 }
