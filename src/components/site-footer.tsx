@@ -2,9 +2,11 @@ import { useSettings } from "@/lib/use-settings";
 import { Link } from "@tanstack/react-router";
 import { Clock, MapPin, Phone } from "lucide-react";
 import logo from "@/assets/logo.png";
+import { formatPhone, telLink } from "@/lib/types";
 
 export function SiteFooter() {
   const settings = useSettings();
+  const phones = [settings?.phone, settings?.phone_secondary].filter(Boolean) as string[];
 
   return (
     <footer className="mt-20 border-t border-border bg-card/50">
@@ -48,9 +50,23 @@ export function SiteFooter() {
         <div>
           <h3 className="text-sm font-bold">اطلاعات تماس</h3>
           <ul className="mt-4 space-y-3 text-sm text-muted-foreground">
-            <li className="flex items-start gap-2">
-              <Phone className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-              <span dir="ltr">{settings?.phone}</span>
+            <li className="flex flex-col gap-1">
+              <div className="flex items-start gap-2">
+                <Phone className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+                <span className="font-semibold">شماره تماس</span>
+              </div>
+              <div className="mr-6 flex flex-col gap-1">
+                {phones.map((phone) => (
+                  <a
+                    key={phone}
+                    href={telLink(phone)}
+                    dir="ltr"
+                    className="hover:text-foreground"
+                  >
+                    {formatPhone(phone)}
+                  </a>
+                ))}
+              </div>
             </li>
             <li className="flex items-start gap-2">
               <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-primary" />

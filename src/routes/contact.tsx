@@ -3,6 +3,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Clock, Compass, MapPin, Navigation, Phone } from "lucide-react";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+import { formatPhone, telLink } from "@/lib/types";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -24,9 +25,15 @@ export const Route = createFileRoute("/contact")({
 
 function ContactPage() {
   const settings = useSettings();
+  const phones = [settings?.phone, settings?.phone_secondary].filter(Boolean) as string[];
 
   const items = [
-    { icon: Phone, title: "شماره تماس", value: settings?.phone ?? "", ltr: true },
+    {
+      icon: Phone,
+      title: "شماره تماس",
+      value: phones.map(formatPhone).join(" / "),
+      ltr: true,
+    },
     { icon: MapPin, title: "آدرس", value: settings?.address ?? "" },
     { icon: Clock, title: "ساعات کاری", value: settings?.working_hours ?? "" },
   ];
@@ -55,31 +62,34 @@ function ContactPage() {
           ))}
         </div>
 
-        <div className="mt-8 grid gap-4 sm:grid-cols-3">
-          <a
-            href={`tel:${settings?.phone ?? ""}`}
-            className="inline-flex items-center justify-center gap-2 rounded-full bg-primary px-6 py-4 text-sm font-bold text-primary-foreground shadow-soft transition-transform hover:scale-[1.02]"
-          >
-            <Phone className="h-4 w-4" />
-            تماس مستقیم
-          </a>
+        <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-4">
+          {phones.map((phone) => (
+            <a
+              key={phone}
+              href={telLink(phone)}
+              className="inline-flex items-center justify-center gap-2 rounded-full bg-primary px-5 py-4 text-sm font-bold text-primary-foreground shadow-soft transition-transform hover:scale-[1.02]"
+            >
+              <Phone className="h-4 w-4" />
+              <span dir="ltr">{formatPhone(phone)}</span>
+            </a>
+          ))}
           <a
             href={settings?.google_maps_url || "#"}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center justify-center gap-2 rounded-full border border-border bg-card px-6 py-4 text-sm font-bold transition-colors hover:bg-accent"
+            className="inline-flex items-center justify-center gap-2 rounded-full border border-border bg-card px-5 py-4 text-sm font-bold transition-colors hover:bg-accent"
           >
             <Navigation className="h-4 w-4 text-primary" />
-            مسیریابی با گوگل مپ
+            گوگل مپ
           </a>
           <a
             href={settings?.neshan_url || "#"}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center justify-center gap-2 rounded-full border border-border bg-card px-6 py-4 text-sm font-bold transition-colors hover:bg-accent"
+            className="inline-flex items-center justify-center gap-2 rounded-full border border-border bg-card px-5 py-4 text-sm font-bold transition-colors hover:bg-accent"
           >
             <Compass className="h-4 w-4 text-primary" />
-            مسیریابی با نشان
+            نشان
           </a>
         </div>
       </main>
