@@ -46,9 +46,9 @@ export interface ClubMember {
 
 export const PRODUCT_LABELS: Record<string, { text: string; emoji: string }> = {
   bestseller: { text: "پرفروش", emoji: "🔥" },
-  special: { text: "فروش ویژه", emoji: "⭐" },
   new: { text: "جدید", emoji: "🆕" },
 };
+
 
 export function formatPrice(value: number): string {
   return new Intl.NumberFormat("fa-IR").format(value) + " تومان";
