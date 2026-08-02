@@ -42,11 +42,6 @@ export function SiteFooter() {
                 تماس با ما
               </Link>
             </li>
-            <li>
-              <Link to="/qr" className="hover:text-foreground">
-                دریافت کیو‌آر کد
-              </Link>
-            </li>
           </ul>
         </div>
 

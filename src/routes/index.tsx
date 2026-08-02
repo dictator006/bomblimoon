@@ -65,7 +65,7 @@ function HomePage() {
           </div>
 
           <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-28 lg:py-36">
-            <div className="max-w-xl animate-rise">
+            <div className="mx-auto max-w-xl animate-rise text-center">
               <span className="inline-flex items-center gap-2 rounded-full border border-border bg-card/70 px-4 py-1.5 text-xs font-semibold backdrop-blur">
                 <Sparkles className="h-3.5 w-3.5 text-primary" />
                 طعمی که منفجر می‌شود
@@ -76,7 +76,7 @@ function HomePage() {
               <p className="mt-5 text-base leading-8 text-muted-foreground sm:text-lg">
                 {settings?.bio}
               </p>
-              <div className="mt-8 flex flex-wrap gap-3">
+              <div className="mt-8 flex flex-wrap justify-center gap-3">
                 <Link
                   to="/menu"
                   className="inline-flex items-center gap-2 rounded-full bg-primary px-7 py-3.5 text-sm font-bold text-primary-foreground shadow-lift transition-transform hover:scale-[1.04]"
@@ -94,7 +94,7 @@ function HomePage() {
                 </a>
               </div>
 
-              <dl className="mt-10 flex flex-wrap gap-x-8 gap-y-3 text-sm text-muted-foreground">
+              <dl className="mt-10 flex flex-wrap justify-center gap-x-8 gap-y-3 text-sm text-muted-foreground">
                 <div className="flex items-center gap-2">
                   <Clock className="h-4 w-4 text-primary" />
                   {settings?.working_hours}
