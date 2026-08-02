@@ -15,7 +15,6 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as ClubRouteImport } from './routes/club'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as MenuRouteImport } from './routes/menu'
-import { Route as QrRouteImport } from './routes/qr'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 
@@ -48,11 +47,6 @@ const MenuRoute = MenuRouteImport.update({
   path: '/menu',
   getParentRoute: () => rootRouteImport,
 } as any)
-const QrRoute = QrRouteImport.update({
-  id: '/qr',
-  path: '/qr',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
@@ -70,7 +64,6 @@ export interface FileRoutesByFullPath {
   '/club': typeof ClubRoute
   '/contact': typeof ContactRoute
   '/menu': typeof MenuRoute
-  '/qr': typeof QrRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin': typeof AuthenticatedAdminRoute
 }
@@ -80,7 +73,6 @@ export interface FileRoutesByTo {
   '/club': typeof ClubRoute
   '/contact': typeof ContactRoute
   '/menu': typeof MenuRoute
-  '/qr': typeof QrRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin': typeof AuthenticatedAdminRoute
 }
@@ -92,31 +84,15 @@ export interface FileRoutesById {
   '/club': typeof ClubRoute
   '/contact': typeof ContactRoute
   '/menu': typeof MenuRoute
-  '/qr': typeof QrRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | '/'
-    | '/auth'
-    | '/club'
-    | '/contact'
-    | '/menu'
-    | '/qr'
-    | '/sitemap.xml'
-    | '/admin'
+    '/' | '/auth' | '/club' | '/contact' | '/menu' | '/sitemap.xml' | '/admin'
   fileRoutesByTo: FileRoutesByTo
-  to:
-    | '/'
-    | '/auth'
-    | '/club'
-    | '/contact'
-    | '/menu'
-    | '/qr'
-    | '/sitemap.xml'
-    | '/admin'
+  to: '/' | '/auth' | '/club' | '/contact' | '/menu' | '/sitemap.xml' | '/admin'
   id:
     | '__root__'
     | '/'
@@ -125,7 +101,6 @@ export interface FileRouteTypes {
     | '/club'
     | '/contact'
     | '/menu'
-    | '/qr'
     | '/sitemap.xml'
     | '/_authenticated/admin'
   fileRoutesById: FileRoutesById
@@ -137,7 +112,6 @@ export interface RootRouteChildren {
   ClubRoute: typeof ClubRoute
   ContactRoute: typeof ContactRoute
   MenuRoute: typeof MenuRoute
-  QrRoute: typeof QrRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
 }
 
@@ -185,13 +159,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MenuRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/qr': {
-      id: '/qr'
-      path: '/qr'
-      fullPath: '/qr'
-      preLoaderRoute: typeof QrRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/sitemap.xml': {
       id: '/sitemap.xml'
       path: '/sitemap.xml'
@@ -227,9 +194,18 @@ const rootRouteChildren: RootRouteChildren = {
   ClubRoute: ClubRoute,
   ContactRoute: ContactRoute,
   MenuRoute: MenuRoute,
-  QrRoute: QrRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
