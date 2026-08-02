@@ -9,7 +9,8 @@ import { AdminButton, Field, inputClass } from "./ui";
 const FIELDS: { key: keyof SiteSettings; label: string; ltr?: boolean }[] = [
   { key: "brand_name", label: "نام برند" },
   { key: "bio", label: "معرفی برند" },
-  { key: "phone", label: "شماره تماس", ltr: true },
+  { key: "phone", label: "شماره تماس اصلی", ltr: true },
+  { key: "phone_secondary", label: "شماره تماس دوم", ltr: true },
   { key: "address", label: "آدرس" },
   { key: "working_hours", label: "ساعات کاری" },
   { key: "snappfood_url", label: "لینک اسنپ‌فود", ltr: true },

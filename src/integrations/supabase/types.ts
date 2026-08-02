@@ -134,6 +134,7 @@ export type Database = {
           meta_title: string
           neshan_url: string
           phone: string
+          phone_secondary: string | null
           snappfood_url: string
           updated_at: string
           working_hours: string
@@ -150,6 +151,7 @@ export type Database = {
           meta_title?: string
           neshan_url?: string
           phone?: string
+          phone_secondary?: string | null
           snappfood_url?: string
           updated_at?: string
           working_hours?: string
@@ -166,6 +168,7 @@ export type Database = {
           meta_title?: string
           neshan_url?: string
           phone?: string
+          phone_secondary?: string | null
           snappfood_url?: string
           updated_at?: string
           working_hours?: string
