@@ -68,7 +68,7 @@ export function toEnglishDigits(value: string): string {
 }
 
 export function toPersianDigits(value: string): string {
-  return value.replace(/\d/g, (digit) => PERSIAN_DIGITS[parseInt(digit, 10)]);
+  return value.replace(/\d/g, (digit) => PERSIAN_DIGITS.charAt(parseInt(digit, 10)));
 }
 
 export function formatPhone(value: string): string {
