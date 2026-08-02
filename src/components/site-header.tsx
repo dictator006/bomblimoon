@@ -10,7 +10,6 @@ const links = [
   { to: "/menu", label: "منو" },
   { to: "/club", label: "باشگاه مشتریان" },
   { to: "/contact", label: "تماس با ما" },
-  { to: "/qr", label: "کیو‌آر کد" },
 ] as const;
 
 export function SiteHeader() {
