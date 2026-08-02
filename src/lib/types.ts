@@ -5,6 +5,7 @@ export interface SiteSettings {
   hero_image_url: string | null;
   bio: string;
   phone: string;
+  phone_secondary: string | null;
   address: string;
   working_hours: string;
   snappfood_url: string;
@@ -51,4 +52,37 @@ export const PRODUCT_LABELS: Record<string, { text: string; emoji: string }> = {
 
 export function formatPrice(value: number): string {
   return new Intl.NumberFormat("fa-IR").format(value) + " تومان";
+}
+
+const PERSIAN_DIGITS = "۰۱۲۳۴۵۶۷۸۹";
+const ARABIC_DIGITS = "٠١٢٣٤٥٦٧٨٩";
+
+export function toEnglishDigits(value: string): string {
+  return value.replace(/./g, (char) => {
+    const pIndex = PERSIAN_DIGITS.indexOf(char);
+    if (pIndex !== -1) return String(pIndex);
+    const aIndex = ARABIC_DIGITS.indexOf(char);
+    if (aIndex !== -1) return String(aIndex);
+    return char;
+  });
+}
+
+export function toPersianDigits(value: string): string {
+  return value.replace(/\d/g, (digit) => PERSIAN_DIGITS[parseInt(digit, 10)]);
+}
+
+export function formatPhone(value: string): string {
+  const digits = toEnglishDigits(value).replace(/\D/g, "");
+  if (digits.length === 11 && digits.startsWith("021")) {
+    return toPersianDigits(`${digits.slice(0, 3)}-${digits.slice(3)}`);
+  }
+  return toPersianDigits(digits);
+}
+
+export function telLink(value: string): string {
+  const digits = toEnglishDigits(value).replace(/\D/g, "");
+  if (digits.length === 11 && digits.startsWith("021")) {
+    return `tel:+98${digits.slice(1)}`;
+  }
+  return `tel:${digits}`;
 }
