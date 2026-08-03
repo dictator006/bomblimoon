@@ -1,6 +1,6 @@
 import { useSettings } from "@/lib/use-settings";
 import { Link } from "@tanstack/react-router";
-import { Clock, MapPin, Phone } from "lucide-react";
+import { Clock, Lock, MapPin, Phone } from "lucide-react";
 import logo from "@/assets/logo.png";
 import { formatPhone, telLink } from "@/lib/types";
 
