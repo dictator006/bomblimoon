@@ -9,6 +9,7 @@ export interface SiteSettings {
   address: string;
   working_hours: string;
   snappfood_url: string;
+  snappfood_url_secondary: string;
   google_maps_url: string;
   neshan_url: string;
   meta_title: string;
