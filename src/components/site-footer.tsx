@@ -80,7 +80,14 @@ export function SiteFooter() {
         </div>
       </div>
       <div className="border-t border-border py-5 text-center text-xs text-muted-foreground">
-        © {new Date().getFullYear()} {settings?.brand_name ?? "بمب لیمون"} — تمامی حقوق محفوظ است.
+        <p>© {new Date().getFullYear()} {settings?.brand_name ?? "بمب لیمون"} — تمامی حقوق محفوظ است.</p>
+        <Link
+          to="/auth"
+          className="mt-2 inline-flex items-center gap-1 text-[11px] text-muted-foreground/70 hover:text-foreground"
+        >
+          <Lock className="h-3 w-3" />
+          ورود به پنل ادمین
+        </Link>
       </div>
     </footer>
   );
