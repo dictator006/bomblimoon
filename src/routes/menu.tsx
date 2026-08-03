@@ -5,7 +5,7 @@ import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { ProductCard } from "@/components/product-card";
 import { getMenu } from "@/lib/site.functions";
-import type { Category, Product } from "@/lib/types";
+import { pickOrderUrl, type Category, type Product } from "@/lib/types";
 
 export const Route = createFileRoute("/menu")({
   loader: (): Promise<{ categories: Category[]; products: Product[] }> => getMenu(),
@@ -94,6 +94,7 @@ function MenuPage() {
                       product={p}
                       emoji={c.emoji}
                       orderUrl={settings?.snappfood_url ?? ""}
+                      pickOrderUrl={() => pickOrderUrl(settings)}
                     />
                   ))}
                 </div>

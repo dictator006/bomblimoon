@@ -1,0 +1,2 @@
+ALTER TABLE public.site_settings ADD COLUMN IF NOT EXISTS snappfood_url_secondary text NOT NULL DEFAULT '';
+UPDATE public.site_settings SET snappfood_url_secondary = 'https://snappfood.ir/' WHERE snappfood_url_secondary = '';

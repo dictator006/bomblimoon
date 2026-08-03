@@ -136,6 +136,7 @@ export type Database = {
           phone: string
           phone_secondary: string | null
           snappfood_url: string
+          snappfood_url_secondary: string
           updated_at: string
           working_hours: string
         }
@@ -153,6 +154,7 @@ export type Database = {
           phone?: string
           phone_secondary?: string | null
           snappfood_url?: string
+          snappfood_url_secondary?: string
           updated_at?: string
           working_hours?: string
         }
@@ -170,6 +172,7 @@ export type Database = {
           phone?: string
           phone_secondary?: string | null
           snappfood_url?: string
+          snappfood_url_secondary?: string
           updated_at?: string
           working_hours?: string
         }

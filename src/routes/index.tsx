@@ -6,7 +6,7 @@ import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { ProductCard } from "@/components/product-card";
 import { getMenu } from "@/lib/site.functions";
-import type { Category, Product } from "@/lib/types";
+import { pickOrderUrl, type Category, type Product } from "@/lib/types";
 
 export const Route = createFileRoute("/")({
   loader: (): Promise<{ categories: Category[]; products: Product[] }> => getMenu(),
@@ -86,6 +86,10 @@ function HomePage() {
                 </Link>
                 <a
                   href={settings?.snappfood_url || "#"}
+                  onClick={(e) => {
+                    const next = pickOrderUrl(settings);
+                    if (next) e.currentTarget.href = next;
+                  }}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-7 py-3.5 text-sm font-bold transition-colors hover:bg-accent"
@@ -157,6 +161,7 @@ function HomePage() {
                   product={p}
                   emoji={emojiByCategory.get(p.category_id ?? "") ?? ""}
                   orderUrl={settings?.snappfood_url ?? ""}
+                  pickOrderUrl={() => pickOrderUrl(settings)}
                 />
               ))}
             </div>

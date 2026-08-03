@@ -5,10 +5,12 @@ export function ProductCard({
   product,
   emoji,
   orderUrl,
+  pickOrderUrl,
 }: {
   product: Product;
   emoji: string;
   orderUrl: string;
+  pickOrderUrl?: () => string;
 }) {
   return (
     <article className="group surface-card flex flex-col overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lift">
@@ -73,6 +75,10 @@ export function ProductCard({
           </span>
           <a
             href={orderUrl || "#"}
+            onClick={(e) => {
+              const next = pickOrderUrl?.();
+              if (next) e.currentTarget.href = next;
+            }}
             target="_blank"
             rel="noopener noreferrer"
             aria-disabled={!product.is_available}

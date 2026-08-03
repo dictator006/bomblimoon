@@ -9,6 +9,7 @@ export interface SiteSettings {
   address: string;
   working_hours: string;
   snappfood_url: string;
+  snappfood_url_secondary: string;
   google_maps_url: string;
   neshan_url: string;
   meta_title: string;
@@ -48,6 +49,20 @@ export const PRODUCT_LABELS: Record<string, { text: string; emoji: string }> = {
   bestseller: { text: "پرفروش", emoji: "🔥" },
   new: { text: "جدید", emoji: "🆕" },
 };
+
+/** All configured SnappFood links (non-empty). */
+export function orderUrls(settings: SiteSettings | null): string[] {
+  return [settings?.snappfood_url, settings?.snappfood_url_secondary]
+    .map((u) => (u ?? "").trim())
+    .filter((u) => u.length > 0);
+}
+
+/** Pick one SnappFood link at random. */
+export function pickOrderUrl(settings: SiteSettings | null): string {
+  const urls = orderUrls(settings);
+  if (urls.length === 0) return "";
+  return urls[Math.floor(Math.random() * urls.length)] as string;
+}
 
 
 export function formatPrice(value: number): string {
