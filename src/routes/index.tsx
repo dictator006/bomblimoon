@@ -86,6 +86,10 @@ function HomePage() {
                 </Link>
                 <a
                   href={settings?.snappfood_url || "#"}
+                  onClick={(e) => {
+                    const next = pickOrderUrl(settings);
+                    if (next) e.currentTarget.href = next;
+                  }}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-7 py-3.5 text-sm font-bold transition-colors hover:bg-accent"
