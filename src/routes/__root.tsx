@@ -100,8 +100,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "description", content: "بمب لیمون؛ فست فود مدرن با برگر دست‌ساز، پیتزا، سوخاری و نوشیدنی‌های تازه. منوی دیجیتال را ببینید و از اسنپ‌فود سفارش دهید." },
       { property: "og:description", content: "بمب لیمون؛ فست فود مدرن با برگر دست‌ساز، پیتزا، سوخاری و نوشیدنی‌های تازه. منوی دیجیتال را ببینید و از اسنپ‌فود سفارش دهید." },
       { name: "twitter:description", content: "بمب لیمون؛ فست فود مدرن با برگر دست‌ساز، پیتزا، سوخاری و نوشیدنی‌های تازه. منوی دیجیتال را ببینید و از اسنپ‌فود سفارش دهید." },
-      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/21d571ea-1bee-4998-94ff-376c4661e3f2" },
-      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/21d571ea-1bee-4998-94ff-376c4661e3f2" },
+      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/9K6HE8HAuyalC6vkIjwBHptixkX2/social-images/social-1785756663995-social-image.webp" },
+      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/9K6HE8HAuyalC6vkIjwBHptixkX2/social-images/social-1785756663995-social-image.webp" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
