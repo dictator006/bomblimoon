@@ -83,7 +83,7 @@ export function ProductCard({
           <span className="text-sm font-extrabold text-foreground">
             {sizes.length > 0 ? `از ${formatPrice(sizes[0]!.price)}` : formatPrice(product.price)}
           </span>
-          <
+          <a
             href={orderUrl || "#"}
             onClick={(e) => {
               const next = pickOrderUrl?.();
