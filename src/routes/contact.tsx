@@ -26,12 +26,14 @@ export const Route = createFileRoute("/contact")({
 function ContactPage() {
   const settings = useSettings();
   const phones = [settings?.phone, settings?.phone_secondary].filter(Boolean) as string[];
+  const mobiles = [settings?.mobile_primary, settings?.mobile_secondary].filter(Boolean) as string[];
+  const allPhones = [...phones, ...mobiles];
 
   const items = [
     {
       icon: Phone,
       title: "شماره تماس",
-      value: phones.map(formatPhone).join(" / "),
+      value: allPhones.map(formatPhone).join(" / "),
       ltr: true,
     },
     { icon: MapPin, title: "آدرس", value: settings?.address ?? "" },
@@ -63,7 +65,7 @@ function ContactPage() {
         </div>
 
         <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-4">
-          {phones.map((phone) => (
+          {allPhones.map((phone) => (
             <a
               key={phone}
               href={telLink(phone)}

@@ -11,6 +11,8 @@ const FIELDS: { key: keyof SiteSettings; label: string; ltr?: boolean }[] = [
   { key: "bio", label: "معرفی برند" },
   { key: "phone", label: "شماره تماس اصلی", ltr: true },
   { key: "phone_secondary", label: "شماره تماس دوم", ltr: true },
+  { key: "mobile_primary", label: "موبایل اول", ltr: true },
+  { key: "mobile_secondary", label: "موبایل دوم", ltr: true },
   { key: "address", label: "آدرس" },
   { key: "working_hours", label: "ساعات کاری" },
   { key: "snappfood_url", label: "لینک اسنپ‌فود (اول)", ltr: true },
