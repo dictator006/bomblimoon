@@ -2,8 +2,8 @@ import { useSettings } from "@/lib/use-settings";
 import { Link } from "@tanstack/react-router";
 import { Menu, Moon, Sun, X } from "lucide-react";
 import { useEffect, useState } from "react";
-import logo from "@/assets/logo.png";
 import { useTheme } from "@/lib/theme";
+import { BrandLogo } from "@/components/brand-logo";
 
 const links = [
   { to: "/", label: "خانه" },
@@ -33,21 +33,47 @@ export function SiteHeader() {
           : "bg-transparent"
       }`}
     >
-      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-3 px-4 sm:h-18 sm:px-6">
-        <Link to="/" className="flex items-center gap-2.5" onClick={() => setOpen(false)}>
-          <img
-            src={settings?.logo_url || logo}
-            alt={`لوگوی ${settings?.brand_name ?? "بمب لیمون"}`}
-            width={40}
-            height={40}
-            className="h-9 w-9 rounded-xl object-contain sm:h-10 sm:w-10"
-          />
-          <span className="text-base font-extrabold tracking-tight sm:text-lg">
-            {settings?.brand_name ?? "بمب لیمون"}
-          </span>
-        </Link>
+      <div className="mx-auto max-w-6xl px-4 sm:px-6">
+        <div className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 pt-3 pb-2 sm:pt-4">
+          <button
+            type="button"
+            onClick={toggle}
+            aria-label="تغییر حالت روشن و تاریک"
+            className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-border bg-card text-foreground transition-colors hover:bg-accent"
+          >
+            {theme === "dark" ? <Sun className="h-4.5 w-4.5" /> : <Moon className="h-4.5 w-4.5" />}
+          </button>
 
-        <nav className="hidden items-center gap-1 md:flex">
+          <Link
+            to="/"
+            onClick={() => setOpen(false)}
+            className="mx-auto flex min-w-0 justify-center"
+            aria-label={settings?.brand_name ?? "بمب لیمون"}
+          >
+            <BrandLogo
+              src={settings?.logo_url}
+              alt={`لوگوی ${settings?.brand_name ?? "بمب لیمون"}`}
+              className="h-14 w-auto max-w-[190px] sm:h-20 sm:max-w-[260px] lg:h-24 lg:max-w-[320px]"
+            />
+          </Link>
+
+          <button
+            type="button"
+            onClick={() => setOpen((v) => !v)}
+            aria-label="منوی ناوبری"
+            className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-border bg-card md:hidden"
+          >
+            {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
+          <Link
+            to="/menu"
+            className="hidden shrink-0 rounded-full bg-primary px-5 py-2.5 text-sm font-bold text-primary-foreground shadow-soft transition-transform hover:scale-[1.03] md:inline-flex"
+          >
+            مشاهده منو
+          </Link>
+        </div>
+
+        <nav className="hidden items-center justify-center gap-1 pb-3 md:flex">
           {links.map((l) => (
             <Link
               key={l.to}
@@ -60,32 +86,8 @@ export function SiteHeader() {
             </Link>
           ))}
         </nav>
-
-        <div className="flex items-center gap-2">
-          <button
-            type="button"
-            onClick={toggle}
-            aria-label="تغییر حالت روشن و تاریک"
-            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border bg-card text-foreground transition-colors hover:bg-accent"
-          >
-            {theme === "dark" ? <Sun className="h-4.5 w-4.5" /> : <Moon className="h-4.5 w-4.5" />}
-          </button>
-          <Link
-            to="/menu"
-            className="hidden rounded-full bg-primary px-5 py-2.5 text-sm font-bold text-primary-foreground shadow-soft transition-transform hover:scale-[1.03] sm:inline-flex"
-          >
-            مشاهده منو
-          </Link>
-          <button
-            type="button"
-            onClick={() => setOpen((v) => !v)}
-            aria-label="منوی ناوبری"
-            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border bg-card md:hidden"
-          >
-            {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-          </button>
-        </div>
       </div>
+
 
       {open && (
         <div className="border-t border-border bg-background/95 backdrop-blur-xl md:hidden">
