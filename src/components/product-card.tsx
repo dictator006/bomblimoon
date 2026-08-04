@@ -69,11 +69,21 @@ export function ProductCard({
         <p className="line-clamp-2 text-sm leading-6 text-muted-foreground">
           {product.description}
         </p>
+        {sizes.length > 0 && (
+          <ul className="mt-2 space-y-1.5 rounded-2xl bg-muted/50 p-3">
+            {sizes.map((s) => (
+              <li key={s.label} className="flex items-center justify-between text-xs font-semibold">
+                <span className="text-muted-foreground">{s.label}</span>
+                <span>{formatPrice(s.price)}</span>
+              </li>
+            ))}
+          </ul>
+        )}
         <div className="mt-auto flex items-center justify-between gap-3 pt-3">
           <span className="text-sm font-extrabold text-foreground">
-            {formatPrice(product.price)}
+            {sizes.length > 0 ? `از ${formatPrice(sizes[0]!.price)}` : formatPrice(product.price)}
           </span>
-          <a
+          <
             href={orderUrl || "#"}
             onClick={(e) => {
               const next = pickOrderUrl?.();
