@@ -79,6 +79,9 @@ export type Database = {
           labels: string[]
           name: string
           price: number
+          price_family: number | null
+          price_medium: number | null
+          price_single: number | null
           slug: string
           sort_order: number
           updated_at: string
@@ -93,6 +96,9 @@ export type Database = {
           labels?: string[]
           name: string
           price?: number
+          price_family?: number | null
+          price_medium?: number | null
+          price_single?: number | null
           slug: string
           sort_order?: number
           updated_at?: string
@@ -107,6 +113,9 @@ export type Database = {
           labels?: string[]
           name?: string
           price?: number
+          price_family?: number | null
+          price_medium?: number | null
+          price_single?: number | null
           slug?: string
           sort_order?: number
           updated_at?: string
@@ -132,6 +141,8 @@ export type Database = {
           logo_url: string | null
           meta_description: string
           meta_title: string
+          mobile_primary: string
+          mobile_secondary: string
           neshan_url: string
           phone: string
           phone_secondary: string | null
@@ -150,6 +161,8 @@ export type Database = {
           logo_url?: string | null
           meta_description?: string
           meta_title?: string
+          mobile_primary?: string
+          mobile_secondary?: string
           neshan_url?: string
           phone?: string
           phone_secondary?: string | null
@@ -168,6 +181,8 @@ export type Database = {
           logo_url?: string | null
           meta_description?: string
           meta_title?: string
+          mobile_primary?: string
+          mobile_secondary?: string
           neshan_url?: string
           phone?: string
           phone_secondary?: string | null
