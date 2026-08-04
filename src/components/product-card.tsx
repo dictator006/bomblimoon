@@ -1,5 +1,5 @@
 import { ExternalLink } from "lucide-react";
-import { PRODUCT_LABELS, formatPrice, type Product } from "@/lib/types";
+import { PRODUCT_LABELS, formatPrice, productSizes, type Product } from "@/lib/types";
 
 export function ProductCard({
   product,
@@ -12,6 +12,7 @@ export function ProductCard({
   orderUrl: string;
   pickOrderUrl?: () => string;
 }) {
+  const sizes = productSizes(product);
   return (
     <article className="group surface-card flex flex-col overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lift">
       <div className="relative aspect-[4/3] overflow-hidden bg-muted">
