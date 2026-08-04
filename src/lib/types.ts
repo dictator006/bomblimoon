@@ -14,6 +14,8 @@ export interface SiteSettings {
   neshan_url: string;
   meta_title: string;
   meta_description: string;
+  mobile_primary: string;
+  mobile_secondary: string;
 }
 
 export interface Category {
@@ -35,6 +37,9 @@ export interface Product {
   is_available: boolean;
   labels: string[];
   sort_order: number;
+  price_single: number | null;
+  price_medium: number | null;
+  price_family: number | null;
 }
 
 export interface ClubMember {
@@ -64,6 +69,20 @@ export function pickOrderUrl(settings: SiteSettings | null): string {
   return urls[Math.floor(Math.random() * urls.length)] as string;
 }
 
+
+export const PIZZA_SIZES = [
+  { key: "price_single", label: "تک‌نفره" },
+  { key: "price_medium", label: "متوسط" },
+  { key: "price_family", label: "خانواده" },
+] as const;
+
+/** Sizes with a price defined for this product. */
+export function productSizes(product: Product): { label: string; price: number }[] {
+  return PIZZA_SIZES.filter((s) => (product[s.key] ?? 0) > 0).map((s) => ({
+    label: s.label,
+    price: product[s.key] as number,
+  }));
+}
 
 export function formatPrice(value: number): string {
   return new Intl.NumberFormat("fa-IR").format(value) + " تومان";

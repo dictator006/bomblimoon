@@ -3,7 +3,7 @@ import { useMemo, useState } from "react";
 import { Pencil, Plus, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { PRODUCT_LABELS, formatPrice, type Category, type Product } from "@/lib/types";
+import { PIZZA_SIZES, PRODUCT_LABELS, formatPrice, type Category, type Product } from "@/lib/types";
 import { AdminButton, Field, ImageUploader, inputClass } from "./ui";
 
 function slugify(name: string) {
@@ -29,6 +29,7 @@ export function ProductsTab() {
   const qc = useQueryClient();
   const [editing, setEditing] = useState<Partial<Product> | null>(null);
   const [filter, setFilter] = useState("");
+  const [activeCat, setActiveCat] = useState<string>("all");
 
   const { data: categories = [] } = useQuery({
     queryKey: ["admin", "categories"],
@@ -68,6 +69,9 @@ export function ProductsTab() {
         is_available: p.is_available ?? true,
         labels: p.labels ?? [],
         sort_order: p.sort_order ?? products.length + 1,
+        price_single: p.price_single ?? null,
+        price_medium: p.price_medium ?? null,
+        price_family: p.price_family ?? null,
       };
       const { error } = p.id
         ? await supabase.from("products").update(payload).eq("id", p.id)
@@ -99,7 +103,20 @@ export function ProductsTab() {
     [categories],
   );
 
-  const visible = products.filter((p) => p.name.includes(filter.trim()));
+  const isPizzaCategory = (id?: string | null) => {
+    const c = categories.find((x) => x.id === id);
+    return !!c && (c.slug.includes("pizza") || c.name.includes("پیتزا"));
+  };
+
+  const visible = products.filter(
+    (p) =>
+      p.name.includes(filter.trim()) &&
+      (activeCat === "all"
+        ? true
+        : activeCat === "none"
+          ? !p.category_id
+          : p.category_id === activeCat),
+  );
 
   function toggleLabel(label: string) {
     if (!editing) return;
@@ -126,6 +143,30 @@ export function ProductsTab() {
             محصول جدید
           </AdminButton>
         </div>
+      </div>
+
+      <div className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1">
+        {[
+          { id: "all", label: `همه (${products.length})` },
+          ...categories.map((c) => ({
+            id: c.id,
+            label: `${c.emoji} ${c.name} (${products.filter((p) => p.category_id === c.id).length})`,
+          })),
+          { id: "none", label: `بدون دسته (${products.filter((p) => !p.category_id).length})` },
+        ].map((c) => (
+          <button
+            key={c.id}
+            type="button"
+            onClick={() => setActiveCat(c.id)}
+            className={`shrink-0 rounded-full px-4 py-2 text-xs font-bold transition ${
+              activeCat === c.id
+                ? "bg-primary text-primary-foreground"
+                : "border border-border bg-card text-muted-foreground hover:bg-accent"
+            }`}
+          >
+            {c.label}
+          </button>
+        ))}
       </div>
 
       {editing && (
@@ -178,6 +219,26 @@ export function ProductsTab() {
               onChange={(e) => setEditing({ ...editing, price: Number(e.target.value) })}
             />
           </Field>
+          {isPizzaCategory(editing.category_id) && (
+            <div className="grid gap-4 md:col-span-2 sm:grid-cols-3">
+              {PIZZA_SIZES.map((sz) => (
+                <Field key={sz.key} label={`قیمت ${sz.label} (تومان)`}>
+                  <input
+                    type="number"
+                    min={0}
+                    className={inputClass}
+                    value={editing[sz.key] ?? ""}
+                    onChange={(e) =>
+                      setEditing({
+                        ...editing,
+                        [sz.key]: e.target.value === "" ? null : Number(e.target.value),
+                      })
+                    }
+                  />
+                </Field>
+              ))}
+            </div>
+          )}
           <Field label="وضعیت موجودی">
             <select
               className={inputClass}

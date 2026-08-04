@@ -1,5 +1,5 @@
 import { ExternalLink } from "lucide-react";
-import { PRODUCT_LABELS, formatPrice, type Product } from "@/lib/types";
+import { PRODUCT_LABELS, formatPrice, productSizes, type Product } from "@/lib/types";
 
 export function ProductCard({
   product,
@@ -12,6 +12,7 @@ export function ProductCard({
   orderUrl: string;
   pickOrderUrl?: () => string;
 }) {
+  const sizes = productSizes(product);
   return (
     <article className="group surface-card flex flex-col overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lift">
       <div className="relative aspect-[4/3] overflow-hidden bg-muted">
@@ -69,9 +70,19 @@ export function ProductCard({
         <p className="line-clamp-2 text-sm leading-6 text-muted-foreground">
           {product.description}
         </p>
+        {sizes.length > 0 && (
+          <ul className="mt-2 space-y-1.5 rounded-2xl bg-muted/50 p-3">
+            {sizes.map((s) => (
+              <li key={s.label} className="flex items-center justify-between text-xs font-semibold">
+                <span className="text-muted-foreground">{s.label}</span>
+                <span>{formatPrice(s.price)}</span>
+              </li>
+            ))}
+          </ul>
+        )}
         <div className="mt-auto flex items-center justify-between gap-3 pt-3">
           <span className="text-sm font-extrabold text-foreground">
-            {formatPrice(product.price)}
+            {sizes.length > 0 ? `از ${formatPrice(sizes[0]!.price)}` : formatPrice(product.price)}
           </span>
           <a
             href={orderUrl || "#"}
