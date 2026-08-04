@@ -4,10 +4,11 @@ import logoAsset from "@/assets/limoon-logo.png.asset.json";
 const SWEEP_KEY = "bomb-lemon-logo-sweep";
 
 type Props = {
-  src?: string | null;
+  src?: string | null | undefined;
   alt: string;
-  className?: string;
+  className?: string | undefined;
 };
+
 
 /** Animated brand mark: entrance, float, lemon glow pulse, one-per-session light sweep. */
 export function BrandLogo({ src, alt, className = "" }: Props) {
