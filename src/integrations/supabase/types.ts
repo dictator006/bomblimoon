@@ -68,6 +68,45 @@ export type Database = {
         }
         Relationships: []
       }
+      page_views: {
+        Row: {
+          created_at: string
+          device: string
+          duration_ms: number
+          id: string
+          is_new_visitor: boolean
+          path: string
+          referrer: string
+          session_id: string
+          source: string
+          visitor_id: string
+        }
+        Insert: {
+          created_at?: string
+          device?: string
+          duration_ms?: number
+          id?: string
+          is_new_visitor?: boolean
+          path: string
+          referrer?: string
+          session_id: string
+          source?: string
+          visitor_id: string
+        }
+        Update: {
+          created_at?: string
+          device?: string
+          duration_ms?: number
+          id?: string
+          is_new_visitor?: boolean
+          path?: string
+          referrer?: string
+          session_id?: string
+          source?: string
+          visitor_id?: string
+        }
+        Relationships: []
+      }
       products: {
         Row: {
           category_id: string | null
@@ -225,6 +264,22 @@ export type Database = {
           _user_id: string
         }
         Returns: boolean
+      }
+      track_page_duration: {
+        Args: { _duration_ms: number; _view_id: string }
+        Returns: undefined
+      }
+      track_page_view: {
+        Args: {
+          _device: string
+          _is_new_visitor: boolean
+          _path: string
+          _referrer: string
+          _session_id: string
+          _source: string
+          _visitor_id: string
+        }
+        Returns: string
       }
     }
     Enums: {
