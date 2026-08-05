@@ -29,8 +29,8 @@ export function SiteHeader() {
     <header
       className={`sticky top-0 z-50 w-full transition-all duration-300 ${
         scrolled
-          ? "border-b border-border bg-background/85 backdrop-blur-xl shadow-soft"
-          : "bg-transparent"
+          ? "border-b border-border bg-background/95 backdrop-blur-xl shadow-soft"
+          : "border-b border-transparent bg-background"
       }`}
     >
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
@@ -53,7 +53,11 @@ export function SiteHeader() {
             <BrandLogo
               src={settings?.logo_url}
               alt={`لوگوی ${settings?.brand_name ?? "بمب لیمون"}`}
-              className="h-14 w-auto max-w-[190px] sm:h-20 sm:max-w-[260px] lg:h-24 lg:max-w-[320px]"
+              className={`w-auto transition-all duration-300 ${
+                scrolled
+                  ? "h-10 max-w-[130px] sm:h-12 sm:max-w-[170px] lg:h-14 lg:max-w-[200px]"
+                  : "h-14 max-w-[190px] sm:h-20 sm:max-w-[260px] lg:h-24 lg:max-w-[320px]"
+              }`}
             />
           </Link>
 
