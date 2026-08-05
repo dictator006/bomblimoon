@@ -1,9 +1,10 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { Gauge, LayoutGrid, LogOut, Settings, Users, UtensilsCrossed } from "lucide-react";
+import { BarChart3, Gauge, LayoutGrid, LogOut, Settings, Users, UtensilsCrossed } from "lucide-react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { DashboardTab } from "@/components/admin/dashboard-tab";
+import { AnalyticsTab } from "@/components/admin/analytics-tab";
 import { ProductsTab } from "@/components/admin/products-tab";
 import { CategoriesTab } from "@/components/admin/categories-tab";
 import { MembersTab } from "@/components/admin/members-tab";
@@ -23,6 +24,7 @@ export const Route = createFileRoute("/_authenticated/admin")({
 
 const TABS = [
   { id: "dashboard", label: "داشبورد", icon: Gauge },
+  { id: "analytics", label: "آمار بازدید", icon: BarChart3 },
   { id: "products", label: "غذاها", icon: UtensilsCrossed },
   { id: "categories", label: "دسته‌بندی‌ها", icon: LayoutGrid },
   { id: "members", label: "باشگاه مشتریان", icon: Users },
@@ -96,6 +98,7 @@ function AdminPage() {
         ) : (
           <>
             {tab === "dashboard" && <DashboardTab />}
+            {tab === "analytics" && <AnalyticsTab />}
             {tab === "products" && <ProductsTab />}
             {tab === "categories" && <CategoriesTab />}
             {tab === "members" && <MembersTab />}
