@@ -4,6 +4,7 @@ import {
   Link,
   createRootRouteWithContext,
   useRouter,
+  useRouterState,
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
@@ -13,6 +14,7 @@ import { Toaster } from "sonner";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { themeScript } from "../lib/theme";
+import { trackPageView } from "../lib/analytics";
 import { getSiteSettings } from "../lib/site.functions";
 import type { SiteSettings } from "../lib/types";
 
@@ -157,6 +159,12 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+
+  useEffect(() => {
+    if (pathname.startsWith("/admin") || pathname.startsWith("/auth")) return;
+    void trackPageView(pathname);
+  }, [pathname]);
 
   return (
     <QueryClientProvider client={queryClient}>
